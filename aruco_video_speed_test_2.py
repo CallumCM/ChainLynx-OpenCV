@@ -2,7 +2,6 @@
 # https://pyimagesearch.com/2020/12/14/generating-aruco-markers-with-opencv-and-python/
 # https://pyimagesearch.com/2020/12/21/detecting-aruco-markers-with-opencv-and-python/
 # https://pyimagesearch.com/2020/12/28/determining-aruco-marker-type-with-opencv-and-python/
-#
 
 # import the necessary packages
 from imutils.video import VideoStream
@@ -52,8 +51,8 @@ if ARUCO_DICT.get(args["type"], None) is None:
 
 # load the ArUCo dictionary and grab the ArUCo parameters
 print("[INFO] detecting '{}' tags...".format(args["type"]))
-arucoDict = cv2.aruco.Dictionary_get(ARUCO_DICT[args["type"]])
-arucoParams = cv2.aruco.DetectorParameters_create()
+arucoDict = cv2.aruco.getPredefinedDictionary(ARUCO_DICT[args["type"]])#cv2.aruco.Dictionary_get(ARUCO_DICT[args["type"]])
+arucoParams = cv2.aruco.DetectorParameters()
 
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")

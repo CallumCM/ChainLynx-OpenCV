@@ -9,7 +9,6 @@ from flask import render_template
 import threading
 import argparse
 import datetime
-import imutils
 import time
 import cv2
 import sys
@@ -193,8 +192,8 @@ if __name__ == '__main__':
 
 	# load the ArUCo dictionary and grab the ArUCo parameters
 	print("[INFO] detecting '{}' tags...".format(args["type"]))
-	arucoDict = cv2.aruco.Dictionary_get(ARUCO_DICT[args["type"]])
-	arucoParams = cv2.aruco.DetectorParameters_create()
+	arucoDict = cv2.aruco.getPredefinedDictionary(ARUCO_DICT[args["type"]])
+	arucoParams = cv2.aruco.DetectorParameters()
 
 	# start a thread that will perform motion detection
 	t = threading.Thread(target=detect_motion, args=(
