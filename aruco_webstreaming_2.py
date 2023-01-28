@@ -95,6 +95,7 @@ def detect_motion(frameCount):
 				# order)
 				corners = markerCorner.reshape((4, 2))
 				(topLeft, topRight, bottomRight, bottomLeft) = corners
+				print(corners)
 				# convert each of the (x, y)-coordinate pairs to integers
 				topRight = (int(topRight[0]), int(topRight[1]))
 				bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
