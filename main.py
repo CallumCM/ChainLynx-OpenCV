@@ -2,6 +2,12 @@ import cv2
 from util import ARUCO_TAGS
 from math import atan
 
+DEBUG_GUI = True
+
+if DEBUG_GUI:
+    import debug
+    debug.main()
+
 # Start a video stream
 stream = cv2.VideoCapture(0)
 
@@ -28,6 +34,7 @@ def detect_markers():
 
         # Loop over the detected ArUCo corners
         for (markerCorner, markerID) in zip(corners, ids):
+
             # Extract the marker corners (which are always returned in
             # top-left, top-right, bottom-right, and bottom-left order)
             corners = markerCorner.reshape((4, 2))
@@ -45,21 +52,38 @@ def detect_markers():
 
 def skew_to_euler(skew_x, skew_y):
     """Converts skew to Euler angles."""
-
-    # Calculate the Euler angles
-    # Involves arctangent, but I do not yet understand
-
-    return (x, y, z)
+    raise NotImplementedError
 
 def get_tag_data(tag_positions):
     """Returns the skew and distance of a tag."""
     (topLeft, topRight, bottomRight, bottomLeft) = tag_positions
 
     midpoint = ((topLeft[0] + topRight[0]) // 2, (topLeft[1] + bottomLeft[1]) // 2)
-    skew = (topLeft[0] - topRight[0]) / (topLeft[1] - topRight[1])
     distance = ((topLeft[0] - topRight[0]) ** 2 + (topLeft[1] - topRight[1]) ** 2) ** 0.5
 
-    return (midpoint, skew, distance)
+    skew_x = atan((topLeft[1] - topRight[1]) / (topLeft[0] - topRight[0]))
+    skew_y = atan((topLeft[1] - bottomLeft[1]) / (topLeft[0] - bottomLeft[0]))
+
+    return (midpoint, (skew_x, skew_y), distance)
+
+def main():
+    """Main function."""
+
+    while False:
+
+        # Detect markers
+        tag_positions = detect_markers()
+
+        # Check if markers were detected
+        if tag_positions:
+
+            # Get the data of the first tag
+            midpoint, skew, distance = get_tag_data(tag_positions[0])
+
+            print(skew)
+
+if __name__ == "__main__":
+    main()
 
 # Release the VideoCapture object
 stream.release()
