@@ -2,24 +2,11 @@ import cv2
 from util import ARUCO_TAGS
 from math import atan
 
-DEBUG_GUI = True
-
-if DEBUG_GUI:
-    import debug
-    debug.main()
-
 # Start a video stream
 stream = cv2.VideoCapture(0)
 
-def detect_markers():
+def detect_markers(frame):
     """Detects and returns data about ArUco markers in the current frame."""
-
-    # Get the current frame
-    frame = stream.read()
-
-    # Check if the frame was grabbed
-    if not frame:
-        return
 
     # Convert the frame to grayscale and detect ArUco markers
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -47,7 +34,7 @@ def detect_markers():
             topLeft = (int(topLeft[0]), int(topLeft[1]))
 
             tag_positions.append((topLeft, topRight, bottomRight, bottomLeft))
-
+    
     return tag_positions
 
 def skew_to_euler(skew_x, skew_y):
@@ -69,18 +56,30 @@ def get_tag_data(tag_positions):
 def main():
     """Main function."""
 
-    while False:
+    while True:
 
+        # Get the current frame
+        _, frame = stream.read()
+
+        if not frame:
+            print('no fram :(')
+            continue
+
+        if DEBUG_GUI:
+            debug.update(frame)
+        
         # Detect markers
-        tag_positions = detect_markers()
+        #tag_positions = detect_markers(frame)
+
+
 
         # Check if markers were detected
-        if tag_positions:
+        #if tag_positions:
 
             # Get the data of the first tag
-            midpoint, skew, distance = get_tag_data(tag_positions[0])
+        #    midpoint, skew, distance = get_tag_data(tag_positions[0])
 
-            print(skew)
+        #    print(skew)
 
 if __name__ == "__main__":
     main()
